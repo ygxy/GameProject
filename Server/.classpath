@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.2"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_74"/>
+	<classpathentry kind="lib" path="E:/Project/JavaProject/AndroidPGameServer/ExtendsJAR/commons-beanutils-1.7.0.jar"/>
+	<classpathentry kind="lib" path="E:/Project/JavaProject/AndroidPGameServer/ExtendsJAR/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="E:/Project/JavaProject/AndroidPGameServer/ExtendsJAR/commons-lang-2.5.jar"/>
+	<classpathentry kind="lib" path="E:/Project/JavaProject/AndroidPGameServer/ExtendsJAR/commons-logging.jar"/>
+	<classpathentry kind="lib" path="E:/Project/JavaProject/AndroidPGameServer/ExtendsJAR/ezmorph-1.0.3.jar"/>
+	<classpathentry kind="lib" path="E:/Project/JavaProject/AndroidPGameServer/ExtendsJAR/json-1.1.1.jar"/>
+	<classpathentry kind="lib" path="E:/Project/JavaProject/AndroidPGameServer/ExtendsJAR/json-lib-2.1-jdk15.jar"/>
+	<classpathentry kind="lib" path="E:/Project/JavaProject/AndroidPGameServer/ExtendsJAR/jstl-1.2.jar"/>
+	<classpathentry kind="lib" path="E:/Project/JavaProject/AndroidPGameServer/ExtendsJAR/ueditor-1.1.2.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
