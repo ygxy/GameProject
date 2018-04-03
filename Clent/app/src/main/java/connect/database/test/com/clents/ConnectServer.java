@@ -4,23 +4,35 @@ import java.io.IOException;
 import java.net.Socket;
 
 /**
- *
+ * Connect to server
  * Created by wangj on 4/2/2018.
  */
 
 public final class ConnectServer {
-    private String strip="192.168.163.132";
-    private int port=8000;
-    private Socket clent;
+    private final String strip="192.168.163.132";
+    private final int port=8000;
+    private Socket server;
 
+    /**
+     *
+     * @return Server Socket
+     */
     public Socket getSocket(){
-        return clent;
+        return server;
+    }
+
+    public void CloseSocket(){
+        try {
+            this.server.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     public ConnectServer(){
         try{
-            clent=new Socket(strip,port);
-            clent.setSoTimeout(5000);
+            server=new Socket(strip,port);
+            server.setSoTimeout(5000);
         }catch(IOException e){
             e.printStackTrace();
         }
