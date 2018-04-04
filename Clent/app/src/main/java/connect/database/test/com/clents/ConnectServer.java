@@ -1,5 +1,7 @@
 package connect.database.test.com.clents;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.Socket;
 
@@ -36,5 +38,17 @@ public final class ConnectServer {
         }catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    public MessageBox Send(){
+        MessageBox messageBox=null;
+
+        return messageBox;
+    }
+
+    public MessageBox Send(JSONObject jsonObject){
+        MessageBox messageBox=null;
+
+        return messageBox;
     }
 }

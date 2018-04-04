@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 
+
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.3"
@@ -18,6 +19,11 @@ android {
         }
     }
 }
+repositories{
+    flatDir{
+        dirs 'libs'
+    }
+}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -29,4 +35,10 @@ dependencies {
     compile 'org.xutils:xutils:3.2.2'
     compile 'com.android.support:design:26.+'
     testCompile 'junit:junit:4.12'
+    compile fileTree(include:['*.jar'],dir:'libs')
 }
+// 在MobSDK的扩展中注册CMSSDK的相关信息
+
+
+
+
