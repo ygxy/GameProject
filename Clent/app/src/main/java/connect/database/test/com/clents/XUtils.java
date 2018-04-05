@@ -23,10 +23,5 @@ public class XUtils extends Application {
         x.Ext.init(this);
         MobSDK.init(this,"250a858a8f300","d68d12a22c4e5d8e1f677f92bdc79062");
     }
-    EventHandler eventHandler=new EventHandler(){
-        @Override
-        public void afterEvent(int event,int result,Object data){
-            Message msg=new Message();
-        }
-    };
+
 }
