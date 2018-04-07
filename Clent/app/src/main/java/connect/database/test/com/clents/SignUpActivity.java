@@ -17,12 +17,16 @@ import android.widget.Toast;
 
 import com.mob.MobSDK;
 
+import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
+/**
+ * 使用 MOB提供的sdk 手机短信验证
+ */
 public class SignUpActivity extends AppCompatActivity {
 
     private Button btn_SignUp;
@@ -50,7 +54,9 @@ public class SignUpActivity extends AppCompatActivity {
         passwd=(TextView)findViewById(R.id.edit_Passwd);
         verpasswd=(TextView)findViewById(R.id.edit_verPasswd);
         MobSDK.init(this,"250a858a8f300","d68d12a22c4e5d8e1f677f92bdc79062");
-
+        /*
+         * 添加点击侦听事件（这里用匿名内部类）
+         */
         btn_SignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,7 +69,10 @@ public class SignUpActivity extends AppCompatActivity {
                 onClickGetCode();
             }
         });
-
+        /*
+         * MOB内置消息类,afterEvent函数为事件侦听后执行
+         * 由于需要验证码验证、调用验证码等多方面处理，所以新建Message类
+         */
         eventHandler=new EventHandler(){
             @Override
             public void afterEvent(int event,int result,Object data){
@@ -75,6 +84,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
 
         };
+        /* 添加侦听 */
         SMSSDK.registerEventHandler(eventHandler);
     }
     @Override
@@ -92,6 +102,7 @@ public class SignUpActivity extends AppCompatActivity {
      */
     private boolean onClickSignUp(){
         boolean ret=false;
+
         /*
          * 验证密码是否符合规范
          */
@@ -207,6 +218,8 @@ public class SignUpActivity extends AppCompatActivity {
                 if(event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE){
                     Toast.makeText(getApplicationContext(), "验证码输入正确",
                             Toast.LENGTH_LONG).show();
+                    ConnectServer connect=new ConnectServer();
+
                 }
             }else{
                 Toast.makeText(getApplicationContext(),"验证码输入错误", Toast.LENGTH_LONG).show();

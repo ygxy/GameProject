@@ -11,7 +11,7 @@ public enum MessageBox {
     SI_FAIL("SignIn Fail"),
     SI_MISS("Sign Miss"),
     SI_NOTFIND("SignIn NotFind"),
-    SI_PASSWDER("SignIn PasswdErr"),
+    SI_PASSWORDWRONG("SignIn Password Wrong"),
     SI_ANOTHERPLACE("SignIn AnotherPlace"),
     /* -*- SignUp -* -*/
     SU_SUCCESS("SignUp Succcess"),
