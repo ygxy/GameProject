@@ -20,13 +20,12 @@ import java.util.TreeMap;
  */
 
 public final class ConnectServer extends Socket{
-    private final String strip="172.25.32.244";
+    private final String strip="127.0.0.1";
     private final int port=8000;
     private OutputStream out;
     private InputStream in;
     private BufferedReader read;
     //private Socket server;
-    private InputStream input;
     /**
      *
      * @return Server Socket
@@ -43,57 +42,29 @@ public final class ConnectServer extends Socket{
     public ConnectServer(){
         try{
             super.connect(new InetSocketAddress(strip,port));
+
             super.setSoTimeout(5000);
         }catch(IOException e){
             e.printStackTrace();
         }
     }
 
-    public MessageBox Send(){
-        MessageBox messageBox=null;
-        return messageBox;
-    }
-
-
-    public MessageBox Send(JSONObject jsonObject){
-        MessageBox messageBox=null;
-        try {
-            out=super.getOutputStream();
-            out.write(jsonObject.toString().getBytes());
-            out.flush();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return messageBox;
-    }
-
     /**
-     * 通过TreeMap构建JSONObject然后发送到服务器
-     * @param tree
+     * 发送消息方法
+     * @param data : Expected Send Message
      * @return
+     * @throws JSONException
+     * @throws IOException
      */
-    public MessageBox Send(TreeMap<String,String> tree){
-        MessageBox messageBox=null;
-        JSONObject send=new JSONObject();
-        Iterator<Map.Entry<String,String>> iterator=tree.entrySet().iterator();
-        Map.Entry<String,String> entry;
-        while(iterator.hasNext()){
-            entry=iterator.next();
-            try{
-                send.put(entry.getKey(),entry.getValue());
-            }catch(JSONException e){
-                e.printStackTrace();
-            }
-        }
-
-        try{
-            byte[] bytes=send.toString().getBytes();
-            out=super.getOutputStream();
-            out.write(bytes);
-
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        return messageBox;
+    public MessageBox Send(JSONObject data) throws JSONException,IOException{
+        MessageBox message=null;
+        byte[] buffer=new byte[1024];
+        out=super.getOutputStream();
+        out.write(data.toString().getBytes());
+        out.close();
+        in=super.getInputStream();
+        in.read(buffer);
+        message=MessageBox.valueOf(buffer.toString());
+        return message;
     }
 }

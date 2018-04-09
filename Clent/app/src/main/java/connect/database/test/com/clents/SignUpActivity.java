@@ -17,6 +17,10 @@ import android.widget.Toast;
 
 import com.mob.MobSDK;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,6 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Button btn_SignUp;
     private Button btn_getCode;
     private TextView phone;
+    private TextView name;
     private TextView passwd;
     private TextView verpasswd;
     private TextView verification;
@@ -49,6 +54,7 @@ public class SignUpActivity extends AppCompatActivity {
         btn_SignUp=(Button)findViewById(R.id.btn_SignUp);
         btn_getCode=(Button)findViewById(R.id.btn_getCode);
 
+        name=(TextView)findViewById(R.id.edit_UserName);
         phone=(TextView)findViewById(R.id.exit_Phone);
         verification=(TextView)findViewById(R.id.edit_CheckCode);
         passwd=(TextView)findViewById(R.id.edit_Passwd);
@@ -198,7 +204,7 @@ public class SignUpActivity extends AppCompatActivity {
      */
     Handler handler=new Handler(){
         @Override
-        public void handleMessage(Message msg){
+        public void handleMessage(Message msg) {
             super.handleMessage(msg);
             int event=msg.arg1;
             int result=msg.arg2;
@@ -219,7 +225,32 @@ public class SignUpActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "验证码输入正确",
                             Toast.LENGTH_LONG).show();
                     ConnectServer connect=new ConnectServer();
-
+                    JSONObject json=new JSONObject();
+                    MessageBox message;
+                    try {
+                        json.put("Value", "SIGNIN");
+                        json.put("UserName",name.getText().toString());
+                        json.put("Passwd",passwd.getText().toString()); //  非加密密码 明文传输需要更改
+                        json.put("Phone",phone.getText().toString());
+                        message=connect.Send(json);
+                        switch (message){
+                            case SU_SUCCESS:
+                                Toast.makeText(getApplicationContext(), "注册成功",
+                                        Toast.LENGTH_LONG).show();
+                                break;
+                            case SU_FAIL:
+                                Toast.makeText(getApplicationContext(), "注册失败",
+                                        Toast.LENGTH_LONG).show();
+                                break;
+                            case SYS_NETERR:
+                                Toast.makeText(getApplicationContext(), "网络连接失败",
+                                        Toast.LENGTH_LONG).show();
+                        }
+                    }catch(JSONException e){
+                        e.printStackTrace();
+                    }catch(IOException e){
+                        e.printStackTrace();
+                    }
                 }
             }else{
                 Toast.makeText(getApplicationContext(),"验证码输入错误", Toast.LENGTH_LONG).show();
