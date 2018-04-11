@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mob.MobSDK;
+import com.mob.tools.RxMob;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +43,8 @@ public class SignUpActivity extends AppCompatActivity {
     private TextView verification;
     private CountDownTimer timer;
     public EventHandler eventHandler;
+    private Thread thread;
+    ConnectServer connect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,9 @@ public class SignUpActivity extends AppCompatActivity {
         verification=(TextView)findViewById(R.id.edit_CheckCode);
         passwd=(TextView)findViewById(R.id.edit_Passwd);
         verpasswd=(TextView)findViewById(R.id.edit_verPasswd);
+
+        connect=new ConnectServer();
+
         MobSDK.init(this,"250a858a8f300","d68d12a22c4e5d8e1f677f92bdc79062");
         /*
          * 添加点击侦听事件（这里用匿名内部类）
@@ -224,36 +230,41 @@ public class SignUpActivity extends AppCompatActivity {
                 if(event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE){
                     Toast.makeText(getApplicationContext(), "验证码输入正确",
                             Toast.LENGTH_LONG).show();
-                    ConnectServer connect=new ConnectServer();
-                    JSONObject json=new JSONObject();
-                    MessageBox message;
-                    try {
-                        json.put("Value", "SIGNIN");
-                        json.put("UserName",name.getText().toString());
-                        json.put("Passwd",passwd.getText().toString()); //  非加密密码 明文传输需要更改
-                        json.put("Phone",phone.getText().toString());
-                        message=connect.Send(json);
-                        switch (message){
-                            case SU_SUCCESS:
-                                Toast.makeText(getApplicationContext(), "注册成功",
-                                        Toast.LENGTH_LONG).show();
-                                break;
-                            case SU_FAIL:
-                                Toast.makeText(getApplicationContext(), "注册失败",
-                                        Toast.LENGTH_LONG).show();
-                                break;
-                            case SYS_NETERR:
-                                Toast.makeText(getApplicationContext(), "网络连接失败",
-                                        Toast.LENGTH_LONG).show();
-                        }
-                    }catch(JSONException e){
-                        e.printStackTrace();
-                    }catch(IOException e){
-                        e.printStackTrace();
-                    }
+                    Send();
                 }
             }else{
                 Toast.makeText(getApplicationContext(),"验证码输入错误", Toast.LENGTH_LONG).show();
+            }
+        }
+        public void Send(){
+            thread=new Thread(connect);
+            thread.start();
+            JSONObject json=new JSONObject();
+            MessageBox message=null;
+            try {
+                json.put("Value", "SIGNIN");
+                json.put("UserName",name.getText().toString());
+                json.put("Passwd",passwd.getText().toString()); //  非加密密码 明文传输需要更改
+                json.put("Phone",phone.getText().toString());
+                message=connect.Send(json);
+                switch (message){
+                    case SU_SUCCESS:
+                        Toast.makeText(getApplicationContext(), "注册成功",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case SU_FAIL:
+                        Toast.makeText(getApplicationContext(), "注册失败",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case SYS_NETERR:
+                        Toast.makeText(getApplicationContext(), "网络连接失败",
+                                Toast.LENGTH_LONG).show();
+                }
+                connect.CloseSocket();
+            }catch(JSONException e){
+                e.printStackTrace();
+            }catch(IOException e){
+                e.printStackTrace();
             }
         }
     };

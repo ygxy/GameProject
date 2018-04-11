@@ -1,9 +1,13 @@
 package connect.database.test.com.clents;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,13 +23,12 @@ import java.util.TreeMap;
  * Created by wangj on 4/2/2018.
  */
 
-public final class ConnectServer extends Socket{
-    private final String strip="127.0.0.1";
+public class ConnectServer implements Runnable{
+    private final String strip="192.168.1.102";
     private final int port=8000;
-    private OutputStream out;
-    private InputStream in;
-    private BufferedReader read;
-    //private Socket server;
+    private DataOutputStream out;
+    private DataInputStream in;
+    private Socket server;
     /**
      *
      * @return Server Socket
@@ -33,21 +36,31 @@ public final class ConnectServer extends Socket{
 
     public void CloseSocket(){
         try {
-            super.close();
+            server.close();
+            in.close();
+            out.close();
         }catch(IOException e){
             e.printStackTrace();
         }
     }
 
-    public ConnectServer(){
+    @Override
+    public void run(){
         try{
-            super.connect(new InetSocketAddress(strip,port));
-
-            super.setSoTimeout(5000);
+            //server=new Socket();
+            //server.connect(new InetSocketAddress(strip,port));
+            server=new Socket();
+            server.connect(new InetSocketAddress("192.168.1.102",8000),5000);
+            //server.setSoTimeout(5000);
+            out=new DataOutputStream(server.getOutputStream());
+            in=new DataInputStream(server.getInputStream());
+            Log.d("Connect Server", ":Success");
         }catch(IOException e){
             e.printStackTrace();
         }
+
     }
+
 
     /**
      * 发送消息方法
@@ -58,13 +71,13 @@ public final class ConnectServer extends Socket{
      */
     public MessageBox Send(JSONObject data) throws JSONException,IOException{
         MessageBox message=null;
-        byte[] buffer=new byte[1024];
-        out=super.getOutputStream();
-        out.write(data.toString().getBytes());
-        out.close();
-        in=super.getInputStream();
-        in.read(buffer);
-        message=MessageBox.valueOf(buffer.toString());
+        String buffer;
+
+        out.writeUTF(data.toString());
+
+        buffer = in.readUTF();
+        message=MessageBox.valueOf(buffer);
         return message;
     }
+    
 }

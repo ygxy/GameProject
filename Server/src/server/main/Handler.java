@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.sql.SQLNonTransientConnectionException;
 /**
@@ -25,8 +26,9 @@ public class Handler implements Runnable  {
 	public void run() {
 		BufferedReader bufferedReader=null;
 		InputStream inputStream=null;
+		OutputStream outputStream=null;
 		InputStreamReader inputStreamReader=null;
-		
+		MessageBox messageBox;
 		//String data=null;
 		byte[] buffer=new byte[4096];
 		int len=0;
@@ -49,8 +51,8 @@ public class Handler implements Runnable  {
 			}
 			
 			signIn=new SignIn(buffer.toString());
-			signIn.getMessage();
-			
+			messageBox=signIn.getMessage();
+			//outputStream.write(messageBox.toString().getBytes());
 			/* Test term, please delete after completion. */
 			System.out.println(os.toString());
 			
